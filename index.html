@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>प्रेरणादायक डैशबोर्ड</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic body styling with a vibrant gradient background */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font as requested */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple to Blue gradient */
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff; /* White text for contrast */
+            padding: 20px; /* Padding around the content */
+        }
+
+        /* Keyframe animation for the flashing notification */
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        /* Class to apply the flashing animation */
+        .flash-animation {
+            animation: flash 1s infinite alternate; /* 1 second duration, infinite, alternates direction */
+        }
+
+        /* Container for the main content (timer, greeting, motivation) */
+        .container {
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white for a modern, frosted glass effect */
+            backdrop-filter: blur(10px); /* Blurs the background behind the container */
+            border-radius: 20px; /* Rounded corners for a sleek look */
+            padding: 30px; /* Inner padding */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            max-width: 800px; /* Maximum width for larger screens */
+            width: 100%; /* Full width on smaller screens */
+            text-align: center; /* Center align text */
+            margin-bottom: 20px; /* Space below the main container */
+        }
+
+        /* Styling for the digital timer */
+        .timer {
+            font-size: 3rem; /* Large font size */
+            font-weight: 700; /* Bold font weight */
+            margin-bottom: 20px; /* Space below the timer */
+            color: #fff; /* White color */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Text shadow for better readability */
+        }
+
+        /* Styling for the greeting message (e.g., "Good Morning") */
+        .greeting {
+            font-size: 2rem; /* Large font size */
+            font-weight: 600; /* Semi-bold */
+            margin-bottom: 15px; /* Space below */
+            color: #ffe082; /* A warm yellow color for a welcoming feel */
+        }
+
+        /* Styling for the motivational line */
+        .motivation {
+            font-size: 1.2rem; /* Standard font size */
+            line-height: 1.6; /* Good line spacing for readability */
+            margin-bottom: 20px; /* Space below */
+            color: #e0e0e0; /* Light grey for subtle contrast */
+        }
+
+        /* Styling for the author text */
+        .author {
+            font-size: 1rem; /* Smaller font size */
+            font-style: italic; /* Italicized text */
+            color: #bdbdbd; /* Lighter grey */
+        }
+
+        /* Styling for the notification box */
+        .notification-box {
+            background-color: #ff5252; /* Bright red for urgency */
+            color: #ffffff; /* White text */
+            padding: 15px 25px; /* Inner padding */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Shadow for pop-out effect */
+            margin-top: 20px; /* Space above */
+            font-size: 1.2rem; /* Standard font size */
+            font-weight: 600; /* Semi-bold */
+            display: none; /* Hidden by default, shown only when triggered */
+            position: fixed; /* Fixed position on the screen */
+            bottom: 20px; /* 20px from the bottom */
+            left: 50%; /* Centered horizontally */
+            transform: translateX(-50%); /* Adjusts for exact centering */
+            z-index: 1000; /* Ensures it appears on top of other content */
+            max-width: 90%; /* Responsive width for mobile */
+            flex-direction: column; /* Arrange content vertically */
+            align-items: center; /* Center items horizontally */
+            gap: 10px; /* Space between message and button */
+        }
+
+        /* Styling for the "Go" button */
+        .go-button {
+            background-color: #4CAF50; /* Green background for the button */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding inside the button */
+            border: none; /* No border */
+            border-radius: 8px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            font-size: 1rem; /* Font size */
+            font-weight: 600; /* Semi-bold */
+            transition: background-color 0.3s ease; /* Smooth transition on hover */
+        }
+
+        .go-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Responsive adjustments for smaller screens (e.g., mobile phones) */
+        @media (max-width: 768px) {
+            .timer {
+                font-size: 2.5rem; /* Smaller font size for timer */
+            }
+            .greeting {
+                font-size: 1.8rem; /* Smaller font size for greeting */
+            }
+            .motivation {
+                font-size: 1rem; /* Smaller font size for motivation */
+            }
+            .container {
+                padding: 20px; /* Reduced padding */
+            }
+            .notification-box {
+                font-size: 1rem; /* Smaller font size for notification */
+                padding: 12px 20px; /* Reduced padding */
+            }
+            .go-button {
+                padding: 8px 16px; /* Smaller padding for button */
+                font-size: 0.9rem; /* Smaller font size for button */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Timer Display Area -->
+        <div id="currentTime" class="timer"></div>
+
+        <!-- Section for Good Morning message and Motivational Line -->
+        <div id="greetingSection">
+            <div id="greetingMessage" class="greeting"></div>
+            <p id="motivationalLine" class="motivation"></p>
+            <p id="author" class="author"></p>
+        </div>
+    </div>
+
+    <!-- Notification Box, hidden by default -->
+    <div id="notificationBox" class="notification-box">
+        <p id="notificationMessage"></p>
+        <button id="goButton" class="go-button" style="display: none;">Go</button> <!-- Go button, hidden by default -->
+    </div>
+
+    <script>
+        // Function to continuously update and display the current time
+        function updateTime() {
+            const now = new Date(); // Get current date and time
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+
+            // Add leading zeros for single-digit hours, minutes, and seconds for consistent formatting
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            // Update the text content of the timer element
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Function to display appropriate greeting and motivational line based on time of day
+        function checkGreetingAndMotivation() {
+            const now = new Date();
+            const hour = now.getHours(); // Get current hour (0-23)
+            const greetingMessage = document.getElementById('greetingMessage');
+            const motivationalLine = document.getElementById('motivationalLine');
+            const author = document.getElementById('author');
+
+            // Check if it's morning (5 AM to 11:59 AM)
+            if (hour >= 5 && hour < 12) {
+                greetingMessage.textContent = 'शुभ प्रभात!'; // Good Morning
+                motivationalLine.textContent = 'रख हौसला वो मंज़र भी आएगा, प्यासे के पास समंदर भी आएगा। तू बस मेहनत कर, तेरे बोर्ड्स एग्जाम में 100% नंबर भी आएगा।';
+                author.textContent = '- ज्ञानोदय के गुरुजी द्वारा'; // Author of the motivational line
+            } else if (hour >= 12 && hour < 17) { // Afternoon (12 PM to 4:59 PM)
+                greetingMessage.textContent = 'शुभ दोपहर!'; // Good Afternoon
+                motivationalLine.textContent = 'अपने लक्ष्य पर ध्यान केंद्रित रखें और कड़ी मेहनत करते रहें। सफलता निश्चित है!';
+                author.textContent = ''; // No specific author for generic message
+            } else if (hour >= 17 && hour < 22) { // Evening (5 PM to 9:59 PM)
+                greetingMessage.textContent = 'शुभ संध्या!'; // Good Evening
+                motivationalLine.textContent = 'हर शाम एक नया अवसर लेकर आती है। अपने सपनों को पूरा करने के लिए इसका उपयोग करें।';
+                author.textContent = '';
+            } else { // Night (10 PM to 4:59 AM)
+                greetingMessage.textContent = 'शुभ रात्रि!'; // Good Night
+                motivationalLine.textContent = 'आराम करें और कल एक नई ऊर्जा के साथ शुरुआत करें।';
+                author.textContent = '';
+            }
+        }
+
+        // Function to trigger a notification at exactly 7:00 PM
+        function checkNotification() {
+            const now = new Date();
+            const hour = now.getHours();
+            const minutes = now.getMinutes();
+            const notificationBox = document.getElementById('notificationBox');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const goButton = document.getElementById('goButton');
+
+            // Check if current time is 7:00 PM (19:00 hours)
+            if (hour === 19 && minutes === 0) {
+                notificationMessage.textContent = 'लाइव क्लास 7 PM पर शुरू हो गई है!'; // Live class notification message
+                notificationBox.style.display = 'flex'; // Use flex to arrange message and button
+                notificationBox.classList.add('flash-animation'); // Add the flashing animation class
+                goButton.style.display = 'block'; // Show the "Go" button
+
+                // Add event listener for the "Go" button
+                goButton.onclick = () => {
+                    // Here you can put the URL for your live class
+                    // For demonstration, we'll just log a message and hide the notification
+                    console.log('Live Class link clicked!');
+                    // window.location.href = 'YOUR_LIVE_CLASS_URL_HERE'; // Uncomment and replace with actual URL
+                    notificationBox.style.display = 'none'; // Hide the notification
+                    notificationBox.classList.remove('flash-animation'); // Remove the flashing animation
+                    goButton.style.display = 'none'; // Hide the button again
+                };
+
+                // Set a timeout to hide the notification after 15 seconds if not clicked
+                // This timeout will only hide the notification, not stop the live class
+                setTimeout(() => {
+                    if (notificationBox.style.display !== 'none') { // Only hide if still visible
+                        notificationBox.style.display = 'none'; // Hide the notification
+                        notificationBox.classList.remove('flash-animation'); // Remove the flashing animation
+                        goButton.style.display = 'none'; // Hide the button again
+                    }
+                }, 15000); // 15000 milliseconds = 15 seconds
+            }
+        }
+
+        // This function runs when the entire page has finished loading
+        window.onload = function() {
+            updateTime(); // Call updateTime immediately to show time on load
+            checkGreetingAndMotivation(); // Call greeting function immediately
+            checkNotification(); // Call notification check immediately (though it will only show at 7 PM)
+
+            // Set intervals to continuously update time, check notifications, and greetings
+            setInterval(updateTime, 1000); // Update time every 1 second
+            setInterval(checkNotification, 1000); // Check for 7 PM notification every 1 second
+            setInterval(checkGreetingAndMotivation, 60000); // Check greeting every 1 minute (less frequent updates needed)
+        };
+    </script>
+
+</body>
+</html>
